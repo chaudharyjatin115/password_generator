@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:password_generator/widgets/reusableWidget.dart';
 
 class PassGen extends StatefulWidget {
   @override
@@ -30,9 +31,12 @@ class _PassGenState extends State<PassGen> {
           ReusableCard(
             child: Row(
               children: [
-                Text('Include Alphabets'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Include Alphabets'),
+                ),
                 SizedBox(
-                  width: 40.0,
+                  width: 80.0,
                 ),
                 Switch(
                     value: false,
@@ -53,24 +57,6 @@ class _PassGenState extends State<PassGen> {
   }
 }
 
-class ReusableCard extends StatelessWidget {
-  final Widget? child;
-  final double height;
-  ReusableCard({@required this.child, this.height = 80});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Color(0xff091642),
-            borderRadius: BorderRadius.circular(10.0)),
-        height: height,
-        child: child,
-      ),
-    );
-  }
-}
 // // Expanded(
 //                     child: Text(
 //                       'fjkdjfkjfk',
