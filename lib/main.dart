@@ -10,7 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PassGen(),
-    );
+        theme: ThemeData.dark().copyWith(
+          primaryColor: Color(0xff050f2e),
+          scaffoldBackgroundColor: Color(0xff050f2e),
+        ),
+        home: Scaffold(
+          body: PassGen(),
+        ));
   }
 }

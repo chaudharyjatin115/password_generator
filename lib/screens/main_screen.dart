@@ -7,35 +7,47 @@ class PassGen extends StatefulWidget {
 }
 
 class _PassGenState extends State<PassGen> {
+  late bool newValue;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xff040f2d),
-      body: SafeArea(
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                'Generator',
-                style: TextStyle(color: Colors.white, fontSize: 30.0),
-              ),
-              trailing: CircleAvatar(
-                backgroundImage: AssetImage('images/man.png'),
-              ),
+    return SafeArea(
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              'Generator',
+              style: TextStyle(color: Colors.white, fontSize: 30.0),
             ),
-            SizedBox(height: 30.0),
-            ReusableCard(
-              child: Row(),
-              height: 90.0,
+            trailing: CircleAvatar(
+              backgroundImage: AssetImage('images/man.png'),
             ),
-            ReusableCard(
-              child: Row(),
+          ),
+          SizedBox(height: 30.0),
+          ReusableCard(
+            child: Row(),
+            height: 90.0,
+          ),
+          ReusableCard(
+            child: Row(
+              children: [
+                Text('Include Alphabets'),
+                SizedBox(
+                  width: 40.0,
+                ),
+                Switch(
+                    value: false,
+                    onChanged: (bool onvlaue) {
+                      setState(() {
+                        newValue = onvlaue;
+                      });
+                    })
+              ],
             ),
-            ReusableCard(
-              child: Row(),
-            ),
-          ],
-        ),
+          ),
+          ReusableCard(
+            child: Row(),
+          ),
+        ],
       ),
     );
   }
