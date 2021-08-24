@@ -5,7 +5,7 @@ import 'package:password_generator/widgets/reusableWidget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class PassGen extends StatefulWidget {
-  bool includeLowecase = true;
+  bool includeLowercase = false;
   bool includeNumbers = false;
   double length = 8;
   bool includeSpecial = true;
@@ -86,17 +86,19 @@ class _PassGenState extends State<PassGen> {
                 value: widget.includeUpperCase,
                 onChanged: (bool newValue) {
                   print(newValue);
-                  widget.includeUpperCase = newValue;
+                  setState(() {
+                    widget.includeUpperCase = newValue;
+                  });
                 }),
           ),
           ReusableCard(
             child: SwitchListTile(
                 title: Text('Include Lowercase'),
-                value: widget.includeLowecase,
-                onChanged: (bool newValue) {
-                  print(newValue);
+                value: widget.includeLowercase,
+                onChanged: (bool ewValue) {
+                  print(ewValue);
                   setState(() {
-                    widget.includeLowecase = newValue;
+                    widget.includeLowercase = ewValue;
                   });
                 }),
           ),
@@ -104,11 +106,11 @@ class _PassGenState extends State<PassGen> {
             child: SwitchListTile(
               title: Text('Include Special'),
               value: widget.includeSpecial,
-              onChanged: (bool newValue) {
-                print(newValue);
+              onChanged: (bool trueValue) {
+                print(trueValue);
                 setState(
                   () {
-                    widget.includeSpecial = newValue;
+                    widget.includeSpecial = trueValue;
                   },
                 );
               },
@@ -144,7 +146,7 @@ class _PassGenState extends State<PassGen> {
                   onPressed: () {
                     setState(() {
                       _Password = PasswordGenerator().generatePassword(
-                          widget.includeLowecase,
+                          widget.includeLowercase,
                           widget.includeUpperCase,
                           widget.includeNumbers,
                           widget.includeSpecial,
