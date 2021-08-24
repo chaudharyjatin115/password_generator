@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:password_generator/brain/pass_brain.dart';
 import 'package:password_generator/widgets/reusableWidget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PassGen extends StatefulWidget {
   bool includeLowecase = true;
@@ -14,6 +16,8 @@ class PassGen extends StatefulWidget {
 }
 
 class _PassGenState extends State<PassGen> {
+  String _Password = '';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,8 +34,25 @@ class _PassGenState extends State<PassGen> {
           ),
           SizedBox(height: 30.0),
           ReusableCard(
-            child: Row(),
-            height: 90.0,
+            child: ListTile(
+              title: Text(
+                '$_Password',
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              trailing: IconButton(
+                onPressed: () {
+                  Clipboard.setData(new ClipboardData(text: _Password));
+                  Fluttertoast.showToast(
+                      msg: "Password Copied",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.white,
+                      textColor: Colors.black,
+                      fontSize: 16.0);
+                },
+                icon: Icon(Icons.copy),
+              ),
+            ),
           ),
           ReusableCard(
             child: Row(
@@ -120,7 +141,16 @@ class _PassGenState extends State<PassGen> {
                 ),
               ),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      _Password = PasswordGenerator().generatePassword(
+                          widget.includeLowecase,
+                          widget.includeUpperCase,
+                          widget.includeNumbers,
+                          widget.includeSpecial,
+                          widget.length);
+                    });
+                  },
                   child: Text(
                     'Generate Password',
                     style: TextStyle(color: Colors.white),
