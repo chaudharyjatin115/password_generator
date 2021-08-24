@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:password_generator/widgets/reusableWidget.dart';
 
 class PassGen extends StatefulWidget {
+  bool includeLetters = true;
+  bool includeNumbers = false;
+  double length = 8;
   @override
   _PassGenState createState() => _PassGenState();
 }
 
 class _PassGenState extends State<PassGen> {
-  late bool newValue;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,29 +35,57 @@ class _PassGenState extends State<PassGen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Include Alphabets'),
+                  child: Text('Include Numbers'),
                 ),
                 SizedBox(
-                  width: 80.0,
+                  width: 100.0,
                 ),
                 Switch(
-                    value: false,
+                    value: widget.includeNumbers,
                     onChanged: (bool onvlaue) {
+                      print(onvlaue);
                       setState(() {
-                        newValue = onvlaue;
+                        widget.includeNumbers = onvlaue;
                       });
                     })
               ],
             ),
           ),
           ReusableCard(
-            child: Row(),
+            child: Row(
+              children: [
+                Text('8'),
+                Slider(
+                    value: widget.length,
+                    min: 8,
+                    max: 32,
+                    onChanged: (double slidValue) {
+                      setState(() {
+                        widget.length = slidValue.toDouble();
+                      });
+                    }),
+                Text('32')
+              ],
+            ),
+          ),
+          ReusableCard(
+            child: SwitchListTile(
+                title: Text('Include Letters'),
+                value: widget.includeLetters,
+                onChanged: (bool newValue) {
+                  print(newValue);
+                  setState(() {
+                    widget.includeLetters = newValue;
+                  });
+                }),
           ),
         ],
       ),
     );
   }
 }
+    
+
 
 // // Expanded(
 //                     child: Text(
