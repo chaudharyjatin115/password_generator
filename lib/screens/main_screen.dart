@@ -57,12 +57,14 @@ class _PassGenState extends State<PassGen> {
           ReusableCard(
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('8'),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('8'),
+                  ),
                 ),
                 Container(
-                  width: 350.0,
+                  width: 330.0,
                   child: Slider(
                       value: widget.length,
                       min: 8,
@@ -73,9 +75,11 @@ class _PassGenState extends State<PassGen> {
                         });
                       }),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('32'),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Text('32'),
+                  ),
                 )
               ],
             ),
