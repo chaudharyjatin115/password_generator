@@ -1,24 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:password_generator/brain/pass_brain.dart';
 import 'package:password_generator/utils/pass_field.dart';
 import 'package:password_generator/widgets/bottom_container.dart';
 import 'package:password_generator/widgets/header.dart';
 import 'package:password_generator/widgets/reusableWidget.dart';
+import 'package:provider/provider.dart';
+import 'package:password_generator/utils/pass_provider.dart';
 
-class PassGen extends StatefulWidget {
-  bool includeLowercase = false;
-  bool includeNumbers = false;
-  double length = 8;
-  bool includeSpecial = true;
-  bool includeUpperCase = true;
-
-  @override
-  _PassGenState createState() => _PassGenState();
-}
-
-class _PassGenState extends State<PassGen> {
-  String _Password = '';
+class PassGen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,8 +15,17 @@ class _PassGenState extends State<PassGen> {
         children: [
           Header(),
           SizedBox(height: 30.0),
-          ReusableCard(
-            child: PassField(_Password),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Color(0xff091642),
+                  borderRadius: BorderRadius.circular(10.0)),
+              height: 100.0,
+              child: Center(
+                child: PassField(Provider.of<PassProvider>(context).password),
+              ),
+            ),
           ),
           ReusableCard(
             child: Row(
@@ -41,13 +39,12 @@ class _PassGenState extends State<PassGen> {
                 Container(
                   width: 330.0,
                   child: Slider(
-                      value: widget.length,
+                      value: Provider.of<PassProvider>(context).length,
                       min: 8,
                       max: 32,
                       onChanged: (double slidValue) {
-                        setState(() {
-                          widget.length = slidValue.toDouble();
-                        });
+                        Provider.of<PassProvider>(context, listen: false)
+                            .setLength(slidValue);
                       }),
                 ),
                 Expanded(
@@ -62,47 +59,41 @@ class _PassGenState extends State<PassGen> {
           ReusableCard(
             child: SwitchListTile(
                 title: Text('Include UpperCase'),
-                value: widget.includeUpperCase,
+                value: Provider.of<PassProvider>(context, listen: false)
+                    .includeUpperCase,
                 onChanged: (bool newValue) {
                   print(newValue);
-                  setState(() {
-                    widget.includeUpperCase = newValue;
-                  });
+                  Provider.of<PassProvider>(context, listen: false)
+                      .toggup(newValue);
                 }),
           ),
           ReusableCard(
             child: SwitchListTile(
                 title: Text('Include Lowercase'),
-                value: widget.includeLowercase,
+                value: Provider.of<PassProvider>(context).includeLowercase,
                 onChanged: (bool ewValue) {
                   print(ewValue);
-                  setState(() {
-                    widget.includeLowercase = ewValue;
-                  });
+                  Provider.of<PassProvider>(context, listen: false)
+                      .togglower(ewValue);
                 }),
           ),
           ReusableCard(
             child: SwitchListTile(
               title: Text('Include Special'),
-              value: widget.includeSpecial,
+              value: Provider.of<PassProvider>(context).includeSpecial,
               onChanged: (bool trueValue) {
-                print(trueValue);
-                setState(
-                  () {
-                    widget.includeSpecial = trueValue;
-                  },
-                );
+                Provider.of<PassProvider>(context, listen: false)
+                    .toggspe(trueValue);
               },
             ),
           ),
           ReusableCard(
             child: SwitchListTile(
                 title: Text('Include Numbers'),
-                value: widget.includeNumbers,
+                value: Provider.of<PassProvider>(context).includeNumbers,
                 onChanged: (bool newValue) {
-                  setState(() {
-                    widget.includeNumbers = newValue;
-                  });
+                  Provider.of<PassProvider>(context, listen: false)
+                      .toggnum(newValue);
                 }),
           ),
           SizedBox(
@@ -111,14 +102,7 @@ class _PassGenState extends State<PassGen> {
           BottomButton(
             TextButton(
                 onPressed: () {
-                  setState(() {
-                    _Password = PasswordGenerator().generatePassword(
-                        widget.includeLowercase,
-                        widget.includeUpperCase,
-                        widget.includeNumbers,
-                        widget.includeSpecial,
-                        widget.length);
-                  });
+                  Provider.of<PassProvider>(context, listen: false).getPass();
                 },
                 child: Text(
                   'Generate Password',
