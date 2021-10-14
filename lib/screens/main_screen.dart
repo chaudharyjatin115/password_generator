@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:password_generator/utils/pass_field.dart';
 import 'package:password_generator/widgets/bottom_container.dart';
 import 'package:password_generator/widgets/header.dart';
 import 'package:password_generator/widgets/reusableWidget.dart';
-import 'package:provider/provider.dart';
+
 import 'package:password_generator/utils/pass_provider.dart';
+
+final passprovider = ChangeNotifierProvider((ref) => PassProvider());
 
 class PassGen extends StatelessWidget {
   @override
@@ -22,9 +25,10 @@ class PassGen extends StatelessWidget {
                   color: Color(0xff091642),
                   borderRadius: BorderRadius.circular(10.0)),
               height: 100.0,
-              child: Center(
-                child: PassField(Provider.of<PassProvider>(context).password),
-              ),
+              child: Consumer(builder: (context, watch, chile) {
+                final pass = watch(passprovider);
+                return PassField(pass.password);
+              }),
             ),
           ),
           ReusableCard(
@@ -37,16 +41,14 @@ class PassGen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  width: 330.0,
-                  child: Slider(
-                      value: Provider.of<PassProvider>(context).length,
-                      min: 8,
-                      max: 32,
-                      onChanged: (double slidValue) {
-                        Provider.of<PassProvider>(context, listen: false)
-                            .setLength(slidValue);
-                      }),
-                ),
+                    width: 330.0,
+                    child: Slider(
+                        value: context.read(passprovider).length,
+                        min: 8,
+                        max: 32,
+                        onChanged: (double slidValue) {
+                          context.read(passprovider).setLength(slidValue);
+                        })),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
@@ -59,41 +61,37 @@ class PassGen extends StatelessWidget {
           ReusableCard(
             child: SwitchListTile(
                 title: Text('Include UpperCase'),
-                value: Provider.of<PassProvider>(context, listen: false)
-                    .includeUpperCase,
+                value: context.read(passprovider).includeUpperCase,
                 onChanged: (bool newValue) {
-                  print(newValue);
-                  Provider.of<PassProvider>(context, listen: false)
-                      .toggup(newValue);
+                  context.read(passprovider).toggup(newValue);
                 }),
           ),
-          ReusableCard(
-            child: SwitchListTile(
-                title: Text('Include Lowercase'),
-                value: Provider.of<PassProvider>(context).includeLowercase,
-                onChanged: (bool ewValue) {
-                  print(ewValue);
-                  Provider.of<PassProvider>(context, listen: false)
-                      .togglower(ewValue);
-                }),
-          ),
+          Consumer(builder: (context, watch, child) {
+            final lowecasepr = watch(passprovider);
+            return ReusableCard(
+              child: SwitchListTile(
+                  title: Text('Include Lowercase'),
+                  value: lowecasepr.includeLowercase,
+                  onChanged: (bool ewValue) {
+                    context.read(passprovider).togglower(ewValue);
+                  }),
+            );
+          }),
           ReusableCard(
             child: SwitchListTile(
               title: Text('Include Special'),
-              value: Provider.of<PassProvider>(context).includeSpecial,
+              value: context.read(passprovider).includeSpecial,
               onChanged: (bool trueValue) {
-                Provider.of<PassProvider>(context, listen: false)
-                    .toggspe(trueValue);
+                context.read(passprovider).toggspe(trueValue);
               },
             ),
           ),
           ReusableCard(
             child: SwitchListTile(
                 title: Text('Include Numbers'),
-                value: Provider.of<PassProvider>(context).includeNumbers,
+                value: context.read(passprovider).includeNumbers,
                 onChanged: (bool newValue) {
-                  Provider.of<PassProvider>(context, listen: false)
-                      .toggnum(newValue);
+                  context.read(passprovider).toggnum(newValue);
                 }),
           ),
           SizedBox(
@@ -102,7 +100,7 @@ class PassGen extends StatelessWidget {
           BottomButton(
             TextButton(
                 onPressed: () {
-                  Provider.of<PassProvider>(context, listen: false).getPass();
+                  context.read(passprovider).getPass();
                 },
                 child: Text(
                   'Generate Password',
