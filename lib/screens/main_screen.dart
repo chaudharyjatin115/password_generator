@@ -12,7 +12,9 @@ final passprovider = ChangeNotifierProvider((ref) => PassProvider());
 
 class PassGen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return SafeArea(
       child: Column(
         children: [
@@ -42,13 +44,16 @@ class PassGen extends StatelessWidget {
                 ),
                 Container(
                     width: 330.0,
-                    child: Slider(
-                        value: context.read(passprovider).length,
-                        min: 8,
-                        max: 32,
-                        onChanged: (double slidValue) {
-                          context.read(passprovider).setLength(slidValue);
-                        })),
+                    child: Consumer(builder: (context, watch, child) {
+                      final slidpro = watch(passprovider);
+                      return Slider(
+                          value: slidpro.length,
+                          min: 8,
+                          max: 32,
+                          onChanged: (double slidValue) {
+                            context.read(passprovider).setLength(slidValue);
+                          });
+                    })),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
@@ -58,14 +63,17 @@ class PassGen extends StatelessWidget {
               ],
             ),
           ),
-          ReusableCard(
-            child: SwitchListTile(
-                title: Text('Include UpperCase'),
-                value: context.read(passprovider).includeUpperCase,
-                onChanged: (bool newValue) {
-                  context.read(passprovider).toggup(newValue);
-                }),
-          ),
+          Consumer(builder: (context, watch, child) {
+            final upcasepr = watch(passprovider);
+            return ReusableCard(
+              child: SwitchListTile(
+                  title: Text('Include UpperCase'),
+                  value: upcasepr.includeUpperCase,
+                  onChanged: (bool newValue) {
+                    context.read(passprovider).toggup(newValue);
+                  }),
+            );
+          }),
           Consumer(builder: (context, watch, child) {
             final lowecasepr = watch(passprovider);
             return ReusableCard(
@@ -77,23 +85,29 @@ class PassGen extends StatelessWidget {
                   }),
             );
           }),
-          ReusableCard(
-            child: SwitchListTile(
-              title: Text('Include Special'),
-              value: context.read(passprovider).includeSpecial,
-              onChanged: (bool trueValue) {
-                context.read(passprovider).toggspe(trueValue);
-              },
-            ),
-          ),
-          ReusableCard(
-            child: SwitchListTile(
-                title: Text('Include Numbers'),
-                value: context.read(passprovider).includeNumbers,
-                onChanged: (bool newValue) {
-                  context.read(passprovider).toggnum(newValue);
-                }),
-          ),
+          Consumer(builder: (context, watch, child) {
+            final speproc = watch(passprovider);
+            return ReusableCard(
+              child: SwitchListTile(
+                title: Text('Include Special'),
+                value: speproc.includeSpecial,
+                onChanged: (bool trueValue) {
+                  context.read(passprovider).toggspe(trueValue);
+                },
+              ),
+            );
+          }),
+          Consumer(builder: (context, watch, child) {
+            final inclNpro = watch(passprovider);
+            return ReusableCard(
+              child: SwitchListTile(
+                  title: Text('Include Numbers'),
+                  value: inclNpro.includeNumbers,
+                  onChanged: (bool newValue) {
+                    context.read(passprovider).toggnum(newValue);
+                  }),
+            );
+          }),
           SizedBox(
             height: 30.0,
           ),
