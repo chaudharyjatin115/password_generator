@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:password_generator/screens/main_screen.dart';
-import 'package:password_generator/utils/pass_provider.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
